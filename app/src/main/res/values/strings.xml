@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">GeoChallengeApp</string>
+    <string name="title_activity_game">GameActivity</string>
+    <string name="button_battle">Battle!</string>
+    <string name="button_play">Play</string>
+    <string name="title_activity_setup">SetupActivity</string>
+
+    <string name="button_op1">Option1</string>
+    <string name="button_op2">Option2</string>
+    <string name="button_op3">Option3</string>
+    <string name="button_op4">Option4</string>
+
+</resources>
