@@ -26,7 +26,7 @@ public class SetupActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        bPlay = (Button)findViewById(R.id.button_play);
+        bPlay = findViewById(R.id.button_play);
         bPlay.setOnClickListener(new PlayListener(this));
     }
 
