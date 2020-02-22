@@ -5,11 +5,11 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 
+// TODO - log4j in jar isnt set up correctly ( log4j properties file )
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MAIN";
@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
 
         bBattle = findViewById(R.id.button_battle);
         bBattle.setOnClickListener((v) -> FireIntent(SetupActivity.class));
-
 
     }
 
@@ -39,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
 
         return super.onOptionsItemSelected(item);
     }
