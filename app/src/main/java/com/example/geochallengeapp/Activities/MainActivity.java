@@ -1,4 +1,4 @@
-package com.example.geochallengeapp;
+package com.example.geochallengeapp.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+
+import com.example.geochallengeapp.R;
 
 // TODO - log4j in jar isnt set up correctly ( log4j properties file )
 public class MainActivity extends AppCompatActivity {
