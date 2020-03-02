@@ -13,7 +13,7 @@ public class UiHandler {
 
     private Handler mHandler;
 
-    UiHandler() {
+    public UiHandler() {
         mHandler = new Handler(Looper.getMainLooper());
     }
 

@@ -11,14 +11,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".SetupActivity"
+            android:name=".Activities.SetupActivity"
             android:label="@string/title_activity_setup"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".GameActivity"
+            android:name=".Activities.GameActivity"
             android:label="@string/title_activity_game"
             android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".Activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
