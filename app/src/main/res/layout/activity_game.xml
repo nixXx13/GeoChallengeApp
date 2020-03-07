@@ -8,6 +8,7 @@
     tools:context=".Activities.GameActivity"
     android:orientation="vertical"
     android:id="@+id/activity_battle"
+
     >
 
     <com.google.android.material.appbar.AppBarLayout

@@ -1,28 +1,41 @@
 package com.example.geochallengeapp;
 
 import android.util.Log;
+
+import com.example.geochallengeapp.Activities.GameActivity;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import Common.GameData;
 import Common.GameStage;
 import GeoChallengeClient.GeoChallengeCoreFactory;
 import GeoChallengeClient.IGeoChallengeCore;
 import GeoChallengeClient.IResponseHandler;
 
+import static com.example.geochallengeapp.Constants.NO_ANSWER;
+
 public class GameManager {
 
     private final String TAG = "============ GameManager";
+
+    private GameActivity gameActivity;
     private IGeoChallengeCore geoChallengeCore;
     private boolean isGameActive;
     private List<GameStage> gameStageList;
     private int totalQuestionsNumber;
     private List<Float> scores;
+    private String playerAnswer;
 
-    public GameManager(String ip, int port){
+    public GameManager(String ip, int port, GameActivity gameActivity){
         geoChallengeCore = GeoChallengeCoreFactory.getGeoChallengeCore(ip,port);
+        this.gameActivity = gameActivity;
         isGameActive = false;
         scores = new ArrayList<>();
+        playerAnswer = NO_ANSWER;
         Log.i(TAG,"Starting geo challenge core");
         Thread t = new Thread(geoChallengeCore);
         t.start();
@@ -41,9 +54,6 @@ public class GameManager {
         totalQuestionsNumber = gameStageList.size();
     }
 
-    public List<GameStage> getGameStageList() {
-        return gameStageList;
-    }
 
     public void addGrade(Float grade){
         scores.add(grade);
@@ -77,7 +87,36 @@ public class GameManager {
          geoChallengeCore.registerHandler(handler);
      }
 
-     public void sendServer(String s){
-         geoChallengeCore.send(s);
+     public void sendPlayerAnswer(float answerTime){
+         Map<String,String> map = new HashMap<>();
+         map.put("time",String.valueOf(answerTime));
+         map.put("answer",playerAnswer);
+         GameData answer = new GameData(GameData.GameDataType.DATA,map);
+         geoChallengeCore.send(answer);
+         prepareQuestion();
      }
+
+    public void setPlayerAnswer(String playerAnswer) {
+        this.playerAnswer = playerAnswer;
+    }
+
+    public String getPlayerAnswer() {
+        return playerAnswer;
+    }
+
+    public void resetPlayerAnswer() {
+        this.playerAnswer = NO_ANSWER;
+    }
+
+    public void prepareQuestion(){
+        // todo - where this method should be?
+        resetPlayerAnswer();
+        if( !gameStageList.isEmpty()) {
+            gameActivity.updateQuestionsDisplay(gameStageList.get(0));
+            gameStageList.remove(0);
+            TimeGradeThread timeGradeThread = new TimeGradeThread(gameActivity, this);
+            Thread t = new Thread(timeGradeThread);
+            t.start();
+        }
+    }
 }

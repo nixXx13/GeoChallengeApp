@@ -61,7 +61,7 @@ public class ResponseHandler implements IResponseHandler {
         gameManager.setGameStageList(Converter.toGameStageList(data));
 
         Log.d(TAG,data.toString());
-        gameActivity.updateQuestionsDisplay();
+        gameManager.prepareQuestion();
     }
 
     private void handleEnd(Map<String,String> data){
@@ -78,13 +78,10 @@ public class ResponseHandler implements IResponseHandler {
     private void handleGrade(Map<String,String> data){
         Float currentScore = Float.valueOf(data.get(GAMEDATA_CONTENT_KEY));
         gameManager.addGrade(currentScore);
-        gameActivity.updateScoreDisplay(currentScore);
+        gameActivity.updateScoreDisplay(gameManager.getTotalScore());
 
         if (gameManager.isAnsweredAllQuestions()){
             gameActivity.toPlayerSummaryDisplay();
         }
     }
-
-
-
 }
