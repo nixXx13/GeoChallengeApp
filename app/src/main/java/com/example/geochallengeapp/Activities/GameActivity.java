@@ -24,7 +24,6 @@ import com.example.geochallengeapp.R;
 import com.example.geochallengeapp.ResponseHandler;
 import com.example.geochallengeapp.UiHandler;
 
-import java.util.List;
 import java.util.Map;
 
 import static com.example.geochallengeapp.Constants.*;
@@ -36,20 +35,17 @@ public class GameActivity extends AppCompatActivity {
 
     private static final String TAG = "========== GameActivity";
 
-    private GameManager gameManager;
-
     private TextView tv_score;
-
     private Button[] button_ops;
     private TextView tv_question;
     private TextView tv_update;
     private ProgressBar pb_logo;
     private ViewGroup transitionsContainer;
-
     private TextView tv_sm_title;
     private TextView tv_sm_scores;
     private TextView tv_sm_others;
 
+    private GameManager gameManager;
     private UiHandler uiHandler;
 
 
@@ -87,7 +83,7 @@ public class GameActivity extends AppCompatActivity {
         tv_sm_scores = transitionsContainer.findViewById(R.id.tv_summary_answer);
         tv_sm_others = transitionsContainer.findViewById(R.id.tv_summary_others);
 
-        gameManager = new GameManager(SERVER_IP,PORT);
+        gameManager = new GameManager(SERVER_IP,PORT,this);
         gameManager.registerHandler(new AckResponseHandler());
         gameManager.registerHandler(new ResponseHandler(gameManager,this,uiHandler));
 
@@ -154,18 +150,12 @@ public class GameActivity extends AppCompatActivity {
         uiHandler.updateTextView(tv_sm_others,String.format(SM_OTHERS_SCORE_TEMPLATE,othersSummary));
     }
 
-    public void updateQuestionsDisplay(){
-        // todo - refactor to only display operations
-        List<GameStage> gameStageList = gameManager.getGameStageList();
-        if ( !gameStageList.isEmpty() ){
-            uiHandler.updateTextView(tv_question,gameStageList.get(0).getQuestion());
-            int i = 0;
-            for(Button b:button_ops){
-                String newText = gameStageList.get(0).getPossibleAnswers().get(i++);
-                uiHandler.updateButtonText(b,newText);
-            }
-            gameStageList.remove(0);
-            // todo - fire count down
+    public void updateQuestionsDisplay(GameStage gameStage){
+        uiHandler.updateTextView(tv_question,gameStage.getQuestion());
+        int i = 0;
+        for(Button b:button_ops){
+            String newText = gameStage.getPossibleAnswers().get(i++);
+            uiHandler.updateButtonText(b,newText);
         }
     }
 
@@ -176,9 +166,8 @@ public class GameActivity extends AppCompatActivity {
             Log.d(TAG,String.format("Button clicked "));
             if(gameManager.isGameActive()){
                 String answer = strings[0];
-                Log.d(TAG,"sending " + answer);
-                gameManager.sendServer(answer);
-                updateQuestionsDisplay();
+                Log.d(TAG,"Player chose answer " + answer);
+                gameManager.setPlayerAnswer(answer);
             }
             return null;
         }
