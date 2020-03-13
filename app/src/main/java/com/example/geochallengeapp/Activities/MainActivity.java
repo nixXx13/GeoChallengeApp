@@ -4,10 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.geochallengeapp.R;
 
@@ -16,15 +19,25 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MAIN";
 
-    public Button bBattle;
+    private ViewGroup transitionsContainer;
+    private TextView tv_play;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        bBattle = findViewById(R.id.button_battle);
-        bBattle.setOnClickListener((v) -> FireIntent(SetupActivity.class));
+        transitionsContainer = findViewById(R.id.activity_main);
+        transitionsContainer.setOnClickListener((v)-> {
+//            FireIntent(SetupActivity.class);
+            FireIntent(GameActivity.class);
+        });
+
+        tv_play = transitionsContainer.findViewById(R.id.tv_play);
+        TransitionManager.beginDelayedTransition(transitionsContainer);
+        tv_play.setTextSize(50);
+        tv_play.setVisibility(View.VISIBLE);
+
 
     }
 
@@ -49,4 +62,5 @@ public class MainActivity extends AppCompatActivity {
         Intent i = new Intent(this, cls);
         startActivity(i);
     }
+
 }
