@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="88dp"
-        android:text="zzzzzzzzzzzzzzzzzzzzzzz"
+        android:text=" "
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/tv_question"
         app:layout_constraintEnd_toEndOf="parent"
@@ -84,19 +84,39 @@
 
     <TextView
         android:id="@+id/tv_summary_others"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="255dp"
+        android:layout_height="42dp"
         android:layout_gravity="center"
-        android:layout_marginBottom="88dp"
-        android:text="worst score"
+        android:layout_marginTop="228dp"
+        android:text="score a\nscore a\nscore a\nscore a\n"
         android:textSize="16sp"
+        android:textAlignment="center"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/tv_question"
+        app:layout_constraintBottom_toTopOf="@+id/pbHeaderProgress"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.214" />
+
+    <Button
+        android:id="@+id/test"
+        android:layout_width="150sp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_marginStart="140dp"
+        android:layout_marginBottom="628dp"
+        android:layout_weight="1"
+        android:background="@color/colorButton"
+        android:text="TEST"
+        android:textAllCaps="false"
+        android:textColor="@color/colorButtonText"
+        android:textSize="16sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/button_op1"
@@ -104,14 +124,17 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="456dp"
+        android:layout_marginTop="444dp"
         android:layout_weight="1"
+        android:background="@color/colorButton"
         android:text="@string/button_op1"
         android:textAllCaps="false"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/colorButtonText"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
 
     <Button
         android:id="@+id/button_op2"
@@ -121,9 +144,10 @@
         android:layout_marginStart="40dp"
         android:layout_marginTop="24dp"
         android:layout_weight="1"
+        android:background="@color/colorButton"
+        android:textColor="@color/colorButtonText"
         android:text="@string/button_op2"
         android:textAllCaps="false"
-        android:textColor="#FFFFFF"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_op1" />
@@ -133,12 +157,13 @@
         android:layout_width="150sp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
-        android:layout_marginTop="456dp"
+        android:layout_marginTop="444dp"
         android:layout_marginEnd="40dp"
         android:layout_weight="1"
+        android:background="@color/colorButton"
         android:text="@string/button_op3"
         android:textAllCaps="false"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/colorButtonText"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -153,14 +178,29 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="40dp"
         android:layout_weight="1"
+        android:background="@color/colorButton"
+        android:textColor="@color/colorButtonText"
         android:text="@string/button_op4"
         android:textAllCaps="false"
-        android:textColor="#FFFFFF"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/button_op2"
         app:layout_constraintTop_toBottomOf="@+id/button_op3" />
+
+
+    <TextView
+        android:id="@+id/tv_timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text=""
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/button_op3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_question" />
 
     <TextView
         android:id="@+id/tv_updates"
@@ -171,7 +211,9 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_op2" />
+        app:layout_constraintTop_toBottomOf="@+id/button_op2"
+        app:layout_constraintVertical_bias="0.575" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -114,7 +114,7 @@ public class GameManager {
         if( !gameStageList.isEmpty()) {
             gameActivity.updateQuestionsDisplay(gameStageList.get(0));
             gameStageList.remove(0);
-            TimeGradeThread timeGradeThread = new TimeGradeThread(gameActivity, this);
+            TimeGradeThread timeGradeThread = new TimeGradeThread(new ScoreTimeout(gameActivity,this,10,0.1f));
             Thread t = new Thread(timeGradeThread);
             t.start();
         }

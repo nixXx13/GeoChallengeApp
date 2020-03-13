@@ -67,6 +67,7 @@ public class ResponseHandler implements IResponseHandler {
     private void handleEnd(Map<String,String> data){
         gameManager.setGameActive(false);
         String summary = data.get(GAMEDATA_CONTENT_KEY);
+        summary = summary.replace(";","\n");
         gameActivity.toOthersSummaryDisplay(summary);
     }
     private void handleUpdate(Map<String,String> data){

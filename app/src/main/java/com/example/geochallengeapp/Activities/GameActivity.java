@@ -31,6 +31,7 @@ import static com.example.geochallengeapp.Constants.*;
 public class GameActivity extends AppCompatActivity {
 
     private final String SERVER_IP = "10.0.2.2";
+//    private final String SERVER_IP = "127.0.0.1";
     private final int PORT = 8888;
 
     private static final String TAG = "========== GameActivity";
@@ -39,6 +40,7 @@ public class GameActivity extends AppCompatActivity {
     private Button[] button_ops;
     private TextView tv_question;
     private TextView tv_update;
+    private TextView tv_timer;
     private ProgressBar pb_logo;
     private ViewGroup transitionsContainer;
     private TextView tv_sm_title;
@@ -47,7 +49,6 @@ public class GameActivity extends AppCompatActivity {
 
     private GameManager gameManager;
     private UiHandler uiHandler;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +61,6 @@ public class GameActivity extends AppCompatActivity {
         Intent i = getIntent();
         String playerName = i.getStringExtra("playerName");
         Log.d(TAG,"got player name " + playerName);
-
 
         transitionsContainer = findViewById(R.id.activity_battle);
         transitionsContainer.setOnClickListener((v)-> {
@@ -75,6 +75,7 @@ public class GameActivity extends AppCompatActivity {
 
         tv_question = transitionsContainer.findViewById(R.id.tv_question);
         tv_update = transitionsContainer.findViewById(R.id.tv_updates);
+        tv_timer = transitionsContainer.findViewById(R.id.tv_timer);
 
         tv_score = transitionsContainer.findViewById(R.id.tv_score);
 
@@ -128,6 +129,7 @@ public class GameActivity extends AppCompatActivity {
 
         uiHandler.setViewVisability(tv_score, View.INVISIBLE);
         uiHandler.setViewVisability(tv_update, View.INVISIBLE);
+        uiHandler.setViewVisability(tv_timer, View.INVISIBLE);
         uiHandler.setViewVisability(tv_question, View.INVISIBLE);
         uiHandler.setViewVisability(button_ops[0], View.INVISIBLE);
         uiHandler.setViewVisability(button_ops[1], View.INVISIBLE);
@@ -142,6 +144,10 @@ public class GameActivity extends AppCompatActivity {
 
     public void updateUpdateDisplay(String update){
         uiHandler.updateTextView(tv_update,update);
+    }
+
+    public void updateTimerDisplay(String update){
+        uiHandler.updateTextView(tv_timer,update);
     }
 
     public void toOthersSummaryDisplay(String othersSummary){
