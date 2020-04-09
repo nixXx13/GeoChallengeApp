@@ -29,8 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
         transitionsContainer = findViewById(R.id.activity_main);
         transitionsContainer.setOnClickListener((v)-> {
-//            FireIntent(SetupActivity.class);
-            FireIntent(GameActivity.class);
+            FireIntent(SetupActivity.class);
         });
 
         tv_play = transitionsContainer.findViewById(R.id.tv_play);

@@ -6,6 +6,159 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".Activities.SetupActivity"
+    android:id="@+id/activity_setup"
     tools:showIn="@layout/activity_setup">
+
+
+    <TextView
+        android:id="@+id/tv_player_name"
+        android:layout_width="166dp"
+        android:layout_height="38dp"
+        android:layout_gravity="start"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="100dp"
+        android:gravity="center"
+        android:text="Player Name"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/et_name"
+        android:layout_width="158dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="100dp"
+        android:hint="Ploni"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/tv_player_name"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/et_room_name"
+        android:layout_width="159dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="24dp"
+        android:hint="WhiteRoom"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/tv_room_name"
+        app:layout_constraintTop_toBottomOf="@+id/et_name" />
+
+    <TextView
+        android:id="@+id/tv_room_name"
+        android:layout_width="166dp"
+        android:layout_height="38dp"
+        android:layout_gravity="start"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:text="Room name"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_player_name" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="235dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="24dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.437"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_room_name">
+
+        <RadioButton
+            android:id="@+id/rb_create"
+            android:layout_width="122dp"
+            android:layout_height="45dp"
+            android:onClick="onRadioButtonClicked"
+            android:text="Create room" />
+
+        <RadioButton
+            android:id="@+id/rb_join"
+            android:layout_width="123dp"
+            android:layout_height="match_parent"
+            android:checked="true"
+            android:onClick="onRadioButtonClicked"
+            android:text="Join room" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/tv_roomSize"
+        android:layout_width="166dp"
+        android:layout_height="37dp"
+        android:layout_gravity="start"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:text="Room size"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+
+    <Spinner
+        android:id="@+id/sp_size"
+        android:layout_width="167dp"
+        android:layout_height="37dp"
+        android:layout_marginTop="24dp"
+        android:textAlignment="textStart"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/tv_roomSize"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+
+    <TextView
+        android:id="@+id/tv_gameType"
+        android:layout_width="166dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:text="Game type"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_roomSize" />
+
+    <Spinner
+        android:id="@+id/sp_type"
+        android:layout_width="168dp"
+        android:layout_height="38dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:textAlignment="textStart"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/tv_gameType"
+        app:layout_constraintTop_toBottomOf="@+id/sp_size" />
+
+    <Button
+        android:id="@+id/button_play"
+        android:layout_width="154dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_marginStart="128dp"
+        android:layout_marginBottom="104dp"
+        android:layout_weight="1"
+        android:text="@string/button_play"
+        android:textAllCaps="false"
+        android:textColor="@color/colorButtonText"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_gameType" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

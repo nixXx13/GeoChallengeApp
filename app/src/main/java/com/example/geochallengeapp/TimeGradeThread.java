@@ -2,6 +2,8 @@ package com.example.geochallengeapp;
 
 import android.util.Log;
 
+import com.example.geochallengeapp.Util.ITickingObject;
+
 public class TimeGradeThread implements Runnable{
 
     private static final String TAG = "========== TimeGradeThread";

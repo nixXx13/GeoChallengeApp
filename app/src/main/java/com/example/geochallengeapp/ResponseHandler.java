@@ -3,6 +3,7 @@ package com.example.geochallengeapp;
 import android.util.Log;
 
 import com.example.geochallengeapp.Activities.GameActivity;
+import com.example.geochallengeapp.Util.UiHandler;
 
 import java.util.Map;
 
@@ -10,7 +11,7 @@ import Common.Converter;
 import Common.GameData;
 import GeoChallengeClient.IResponseHandler;
 
-import static com.example.geochallengeapp.Constants.GAMEDATA_CONTENT_KEY;
+import static com.example.geochallengeapp.Util.Constants.GAMEDATA_CONTENT_KEY;
 
 public class ResponseHandler implements IResponseHandler {
 
@@ -67,8 +68,7 @@ public class ResponseHandler implements IResponseHandler {
     private void handleEnd(Map<String,String> data){
         gameManager.setGameActive(false);
         String summary = data.get(GAMEDATA_CONTENT_KEY);
-        summary = summary.replace(";","\n");
-        gameActivity.toOthersSummaryDisplay(summary);
+        gameActivity.toSummaryDisplay(summary);
     }
     private void handleUpdate(Map<String,String> data){
         String updateStr = data.get(GAMEDATA_CONTENT_KEY);

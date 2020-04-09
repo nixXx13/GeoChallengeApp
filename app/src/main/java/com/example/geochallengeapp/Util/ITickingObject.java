@@ -1,4 +1,4 @@
-package com.example.geochallengeapp;
+package com.example.geochallengeapp.Util;
 
 public interface ITickingObject {
 

@@ -22,17 +22,17 @@ import android.widget.TextView;
 import com.example.geochallengeapp.GameManager;
 import com.example.geochallengeapp.R;
 import com.example.geochallengeapp.ResponseHandler;
-import com.example.geochallengeapp.UiHandler;
+import com.example.geochallengeapp.Util.UiHandler;
 
 import java.util.Map;
 
-import static com.example.geochallengeapp.Constants.*;
+import static com.example.geochallengeapp.Util.Constants.*;
 
 public class GameActivity extends AppCompatActivity {
 
-    private final String SERVER_IP = "10.0.2.2";
-//    private final String SERVER_IP = "127.0.0.1";
-    private final int PORT = 8888;
+//    private final String SERVER_IP = "10.0.2.2";
+    private final String SERVER_IP = "54.93.59.87";
+    private final int PORT = 4567;
 
     private static final String TAG = "========== GameActivity";
 
@@ -50,6 +50,12 @@ public class GameActivity extends AppCompatActivity {
     private GameManager gameManager;
     private UiHandler uiHandler;
 
+    private String playerName;
+    private String roomName;
+    private String roomType;
+    private String roomSize;
+    private String isCreate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         uiHandler = new UiHandler();
@@ -57,17 +63,8 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        // TODO - delete
-        Intent i = getIntent();
-        String playerName = i.getStringExtra("playerName");
-        Log.d(TAG,"got player name " + playerName);
-
         transitionsContainer = findViewById(R.id.activity_battle);
-        transitionsContainer.setOnClickListener((v)-> {
-            if(gameManager.isGameEnded()){
-                finish();
-            }
-        });
+
         pb_logo = transitionsContainer.findViewById(R.id.pbHeaderProgress);
         pb_logo.setVisibility(View.VISIBLE);
 
@@ -88,6 +85,12 @@ public class GameActivity extends AppCompatActivity {
         gameManager.registerHandler(new AckResponseHandler());
         gameManager.registerHandler(new ResponseHandler(gameManager,this,uiHandler));
 
+        Intent i = getIntent();
+        playerName = i.getStringExtra("name");
+        roomName = i.getStringExtra("rooName");
+        roomSize = i.getStringExtra("roomSize");
+        roomType = i.getStringExtra("roomType");
+        isCreate = i.getStringExtra("isCreate");
     }
 
     @Override
@@ -113,10 +116,21 @@ public class GameActivity extends AppCompatActivity {
         button_ops[3] = transitionsContainer.findViewById(R.id.button_op4);
         for ( Button b : button_ops){
             b.setOnClickListener((v)-> new AsyncTaskSend().execute(b.getText().toString()));
+            b.setVisibility(View.INVISIBLE);
         }
     }
 
     public void toPlayerSummaryDisplay(){
+
+        uiHandler.setViewVisability(tv_score, View.INVISIBLE);
+        uiHandler.setViewVisability(tv_update, View.INVISIBLE);
+        uiHandler.setViewVisability(tv_timer, View.INVISIBLE);
+        uiHandler.setViewVisability(tv_question, View.INVISIBLE);
+        uiHandler.setViewVisability(button_ops[0], View.INVISIBLE);
+        uiHandler.setViewVisability(button_ops[1], View.INVISIBLE);
+        uiHandler.setViewVisability(button_ops[2], View.INVISIBLE);
+        uiHandler.setViewVisability(button_ops[3], View.INVISIBLE);
+
         uiHandler.updateTextView(tv_sm_title,String.format(SM_TOTAL_SCORE_TEMPLATE,gameManager.getTotalScore()));
         uiHandler.updateTextView(tv_sm_scores,String.format(SM_SCORE_TEMPLATE,gameManager.getMaxScore(),gameManager.getMinScore()));
         uiHandler.updateTextView(tv_sm_others,"Waiting for other players to finish...");
@@ -127,14 +141,6 @@ public class GameActivity extends AppCompatActivity {
         uiHandler.setViewVisability(tv_sm_others, View.VISIBLE);
         uiHandler.setViewVisability(pb_logo, View.VISIBLE);
 
-        uiHandler.setViewVisability(tv_score, View.INVISIBLE);
-        uiHandler.setViewVisability(tv_update, View.INVISIBLE);
-        uiHandler.setViewVisability(tv_timer, View.INVISIBLE);
-        uiHandler.setViewVisability(tv_question, View.INVISIBLE);
-        uiHandler.setViewVisability(button_ops[0], View.INVISIBLE);
-        uiHandler.setViewVisability(button_ops[1], View.INVISIBLE);
-        uiHandler.setViewVisability(button_ops[2], View.INVISIBLE);
-        uiHandler.setViewVisability(button_ops[3], View.INVISIBLE);
     }
 
     public void updateScoreDisplay(float score){
@@ -150,10 +156,20 @@ public class GameActivity extends AppCompatActivity {
         uiHandler.updateTextView(tv_timer,update);
     }
 
-    public void toOthersSummaryDisplay(String othersSummary){
+    public void toSummaryDisplay(String summary){
         uiHandler.setViewVisability(pb_logo, View.INVISIBLE);
-        TransitionManager.beginDelayedTransition(transitionsContainer);
-        uiHandler.updateTextView(tv_sm_others,String.format(SM_OTHERS_SCORE_TEMPLATE,othersSummary));
+        Intent i = new Intent(this, SummaryActivity.class);
+
+        String[] summaryArr = summary.split("&");
+        i.putExtra("summary", summaryArr[0]);
+
+        String best = "";
+        if(summaryArr.length > 1)
+            best = summaryArr[1];
+
+        i.putExtra("best", best);
+        startActivity(i);
+        finish();
     }
 
     public void updateQuestionsDisplay(GameStage gameStage){
@@ -162,6 +178,7 @@ public class GameActivity extends AppCompatActivity {
         for(Button b:button_ops){
             String newText = gameStage.getPossibleAnswers().get(i++);
             uiHandler.updateButtonText(b,newText);
+            uiHandler.setViewVisability(b,View.VISIBLE);
         }
     }
 
@@ -187,8 +204,15 @@ public class GameActivity extends AppCompatActivity {
             Map<String,String> data = gameData.getContent();
 
             if (gameDataType == GameData.GameDataType.ACK) {
-                Log.d(TAG,String.format("Handling event type %s",gameDataType.toString()));
-                handleAck(data);
+                String ackMsg = data.get("msg");
+                Log.d(TAG,String.format("Handling event type ack %s",ackMsg));
+                if( "Connected".equals(ackMsg)) {
+                    new AsyncTaskSendConfig(gameManager,playerName,roomName,isCreate).execute();
+                }
+                else{
+                    // joined room
+                    handleAck(data);
+                }
             }
         }
 
@@ -198,4 +222,26 @@ public class GameActivity extends AppCompatActivity {
         }
 
     }
+
+    private class AsyncTaskSendConfig extends AsyncTask<String, String, Void> {
+
+        private GameManager gameManager;
+        private String playerName;
+        private String roomName;
+        private String isCreate;
+
+        AsyncTaskSendConfig(GameManager gameManager,String playerName, String roomName, String isCreate){
+            this.gameManager = gameManager;
+            this.playerName = playerName;
+            this.roomName = roomName;
+            this.isCreate = isCreate;
+        }
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            gameManager.init(playerName,roomName,isCreate,roomSize,roomType);
+            return null;
+        }
+    }
+
 }
