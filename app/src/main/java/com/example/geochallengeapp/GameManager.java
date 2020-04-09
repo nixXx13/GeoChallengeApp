@@ -16,7 +16,7 @@ import GeoChallengeClient.GeoChallengeCoreFactory;
 import GeoChallengeClient.IGeoChallengeCore;
 import GeoChallengeClient.IResponseHandler;
 
-import static com.example.geochallengeapp.Constants.NO_ANSWER;
+import static com.example.geochallengeapp.Util.Constants.NO_ANSWER;
 
 public class GameManager {
 
@@ -39,6 +39,12 @@ public class GameManager {
         Log.i(TAG,"Starting geo challenge core");
         Thread t = new Thread(geoChallengeCore);
         t.start();
+    }
+
+    public void init(String playerName, String roomName, String isCreate, String roomSize, String roomType){
+        String questionsNumber = "5";
+        geoChallengeCore.send(new GameData(GameData.GameDataType.ACK,String.format("%s:%s:%s:%s:%s:%s",playerName,roomName,isCreate,
+                roomSize,questionsNumber,roomType)));
     }
 
     public void setGameActive(boolean isGameActive) {
@@ -114,7 +120,7 @@ public class GameManager {
         if( !gameStageList.isEmpty()) {
             gameActivity.updateQuestionsDisplay(gameStageList.get(0));
             gameStageList.remove(0);
-            TimeGradeThread timeGradeThread = new TimeGradeThread(new ScoreTimeout(gameActivity,this,10,0.1f));
+            TimeGradeThread timeGradeThread = new TimeGradeThread(new ScoreTimeout(gameActivity,this,20,0.1f));
             Thread t = new Thread(timeGradeThread);
             t.start();
         }

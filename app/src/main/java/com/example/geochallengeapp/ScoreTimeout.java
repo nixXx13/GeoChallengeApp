@@ -3,8 +3,9 @@ package com.example.geochallengeapp;
 import android.util.Log;
 
 import com.example.geochallengeapp.Activities.GameActivity;
+import com.example.geochallengeapp.Util.ITickingObject;
 
-import static com.example.geochallengeapp.Constants.NO_ANSWER;
+import static com.example.geochallengeapp.Util.Constants.NO_ANSWER;
 
 public class ScoreTimeout implements ITickingObject{
 

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/earth2_blank_game_small"
     tools:context=".Activities.SetupActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -30,19 +31,6 @@
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@android:drawable/ic_dialog_email" />
 
-    <Button
-        android:id="@+id/button_play"
-        android:layout_width="150sp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|center_horizontal"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="456dp"
-        android:layout_weight="1"
-        android:text="@string/button_play"
-        android:textAllCaps="false"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

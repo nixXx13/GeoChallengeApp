@@ -1,4 +1,4 @@
-package com.example.geochallengeapp;
+package com.example.geochallengeapp.Util;
 
 import android.app.Activity;
 import android.content.Context;
