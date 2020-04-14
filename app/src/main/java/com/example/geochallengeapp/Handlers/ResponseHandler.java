@@ -1,8 +1,9 @@
-package com.example.geochallengeapp;
+package com.example.geochallengeapp.Handlers;
 
 import android.util.Log;
 
 import com.example.geochallengeapp.Activities.GameActivity;
+import com.example.geochallengeapp.GameManager;
 import com.example.geochallengeapp.Util.UiHandler;
 
 import java.util.Map;

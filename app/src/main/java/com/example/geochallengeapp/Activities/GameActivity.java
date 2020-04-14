@@ -20,18 +20,23 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.geochallengeapp.GameManager;
+import com.example.geochallengeapp.IGameManagerStarter;
 import com.example.geochallengeapp.R;
-import com.example.geochallengeapp.ResponseHandler;
+import com.example.geochallengeapp.Handlers.ResponseHandler;
+import com.example.geochallengeapp.Util.RestUtil;
 import com.example.geochallengeapp.Util.UiHandler;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 import java.util.Map;
 
 import static com.example.geochallengeapp.Util.Constants.*;
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity implements IGameManagerStarter,IResponseHandler {
 
 //    private final String SERVER_IP = "10.0.2.2";
-    private final String SERVER_IP = "54.93.59.87";
+    // TODO - DO NOT PUBLISH
+    private final String LAMBDA_URL = "https://xxxxxxxx.execute-api.eu-central-1.amazonaws.com/dev/gcserver";
     private final int PORT = 4567;
 
     private static final String TAG = "========== GameActivity";
@@ -81,16 +86,14 @@ public class GameActivity extends AppCompatActivity {
         tv_sm_scores = transitionsContainer.findViewById(R.id.tv_summary_answer);
         tv_sm_others = transitionsContainer.findViewById(R.id.tv_summary_others);
 
-        gameManager = new GameManager(SERVER_IP,PORT,this);
-        gameManager.registerHandler(new AckResponseHandler());
-        gameManager.registerHandler(new ResponseHandler(gameManager,this,uiHandler));
-
         Intent i = getIntent();
         playerName = i.getStringExtra("name");
         roomName = i.getStringExtra("rooName");
         roomSize = i.getStringExtra("roomSize");
         roomType = i.getStringExtra("roomType");
         isCreate = i.getStringExtra("isCreate");
+
+        new HttpGetRequest(this).execute(LAMBDA_URL);
     }
 
     @Override
@@ -115,7 +118,7 @@ public class GameActivity extends AppCompatActivity {
         button_ops[2] = transitionsContainer.findViewById(R.id.button_op3);
         button_ops[3] = transitionsContainer.findViewById(R.id.button_op4);
         for ( Button b : button_ops){
-            b.setOnClickListener((v)-> new AsyncTaskSend().execute(b.getText().toString()));
+            b.setOnClickListener((v)-> onButtonClick(v,b));
             b.setVisibility(View.INVISIBLE);
         }
     }
@@ -182,66 +185,67 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    private class AsyncTaskSend extends AsyncTask<String, String, Void> {
-
-        @Override
-        protected Void doInBackground(String... strings) {
-            Log.d(TAG,String.format("Button clicked "));
-            if(gameManager.isGameActive()){
-                String answer = strings[0];
-                Log.d(TAG,"Player chose answer " + answer);
-                gameManager.setPlayerAnswer(answer);
-            }
-            return null;
+    private void onButtonClick(View view, Button b) {
+        if(gameManager.isGameActive()){
+            String answer = b.getText().toString();
+            Log.d(TAG,"Player chose answer " + answer);
+            gameManager.setPlayerAnswer(answer);
         }
     }
 
-    private class AckResponseHandler implements IResponseHandler{
+    @Override
+    public void handle(GameData gameData) {
+        GameData.GameDataType gameDataType = gameData.getType();
+        Map<String, String> data = gameData.getContent();
 
-        @Override
-        public void handle(GameData gameData) {
-            GameData.GameDataType gameDataType = gameData.getType();
-            Map<String,String> data = gameData.getContent();
-
-            if (gameDataType == GameData.GameDataType.ACK) {
-                String ackMsg = data.get("msg");
-                Log.d(TAG,String.format("Handling event type ack %s",ackMsg));
-                if( "Connected".equals(ackMsg)) {
-                    new AsyncTaskSendConfig(gameManager,playerName,roomName,isCreate).execute();
-                }
-                else{
-                    // joined room
-                    handleAck(data);
-                }
+        if (gameDataType == GameData.GameDataType.ACK) {
+            String ackMsg = data.get("msg");
+            Log.d(TAG, String.format("Handling event type ack %s", ackMsg));
+            if ("Connected".equals(ackMsg)) {
+//                new AsyncTaskSendConfig(gameManager, playerName, roomName, isCreate).execute();
+                new AsyncTask() {
+                    @Override
+                    protected Void doInBackground(Object... objects) {
+                        gameManager.init(playerName, roomName, isCreate, roomSize, roomType);
+                        return null;
+                    }
+                }.execute();
+            } else {
+                // joined room
+                uiHandler.setViewVisability(pb_logo, View.INVISIBLE);
+                uiHandler.updateTextView(tv_question,"Waiting for other players...");
             }
         }
-
-        private void handleAck(Map<String,String> data) {
-            uiHandler.setViewVisability(pb_logo, View.INVISIBLE);
-            uiHandler.updateTextView(tv_question,"Waiting for other players...");
-        }
-
     }
 
-    private class AsyncTaskSendConfig extends AsyncTask<String, String, Void> {
+    @Override
+    public void start(String ip,int port){
+        gameManager = new GameManager(ip,port,this);
+        gameManager.registerHandler(this);
+        gameManager.registerHandler(new ResponseHandler(gameManager,this,uiHandler));
+    }
 
-        private GameManager gameManager;
-        private String playerName;
-        private String roomName;
-        private String isCreate;
 
-        AsyncTaskSendConfig(GameManager gameManager,String playerName, String roomName, String isCreate){
-            this.gameManager = gameManager;
-            this.playerName = playerName;
-            this.roomName = roomName;
-            this.isCreate = isCreate;
+    public class  HttpGetRequest extends AsyncTask<String, Void, String> {
+
+        private IGameManagerStarter gameManagerStarter;
+        public HttpGetRequest(IGameManagerStarter gameManagerStarter){
+            this.gameManagerStarter = gameManagerStarter;
         }
 
         @Override
-        protected Void doInBackground(String... strings) {
-            gameManager.init(playerName,roomName,isCreate,roomSize,roomType);
-            return null;
+        protected String doInBackground(String... params){
+            String url = params[0];
+            return RestUtil.get(url);
+        }
+        protected void onPostExecute(String result){
+            JsonObject jsonObject = RestUtil.toJson(result);
+            JsonElement jsonElement = jsonObject.get("body");
+            if (jsonElement!= null) {
+                String ip = jsonElement.getAsString().replace("\"", "");
+                gameManagerStarter.start(ip,PORT);
+            }
+
         }
     }
-
 }
