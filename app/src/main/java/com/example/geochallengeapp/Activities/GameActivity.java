@@ -93,7 +93,7 @@ public class GameActivity extends AppCompatActivity implements IGameManagerStart
         roomType = i.getStringExtra("roomType");
         isCreate = i.getStringExtra("isCreate");
 
-        new HttpGetRequest(this).execute(LAMBDA_URL);
+        new HttpGetRequest(this).execute(LAMBDA_URL, roomName);
     }
 
     @Override
@@ -236,7 +236,8 @@ public class GameActivity extends AppCompatActivity implements IGameManagerStart
         @Override
         protected String doInBackground(String... params){
             String url = params[0];
-            return RestUtil.get(url);
+            String room = params[1];
+            return RestUtil.get(url, room);
         }
         protected void onPostExecute(String result){
             JsonObject jsonObject = RestUtil.toJson(result);
