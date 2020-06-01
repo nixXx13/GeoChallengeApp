@@ -11,13 +11,14 @@ import java.net.URL;
 
 public class RestUtil {
 
-    public static String get(String url) {
+    public static String get(String url, String room) {
         try {
             final String REQUEST_METHOD = "GET";
             final int READ_TIMEOUT = 15000;
             final int CONNECTION_TIMEOUT = 15000;
 
             //Create a URL object holding our url
+            url = String.format("%s?room=%s",url,room);
             URL myUrl = new URL(url);
             //Create a connection
             HttpURLConnection connection = (HttpURLConnection)
