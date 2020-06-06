@@ -10,6 +10,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.geochallengeapp.R;
+import com.google.gson.Gson;
+
+import java.util.HashMap;
+import java.util.List;
 
 public class SummaryActivity extends AppCompatActivity {
 
@@ -88,21 +92,24 @@ public class SummaryActivity extends AppCompatActivity {
 
     }
 
-    private void updateBestScores(String result) {
-        if(!"".equals(result)) {
+    private void updateBestScores(String resultJson) {
+
+        if(!"".equals(resultJson)) {
+            Gson gson = new Gson();
+            HashMap<String,String> resp = gson.fromJson(resultJson, HashMap.class);
+            List ll = gson.fromJson(resp.get("scores"), List.class);
+            List<String> playerNames = (List)ll.get(0);
+            List<Double> scores = (List)ll.get(1);
+
             tv_bestScores.setVisibility(View.VISIBLE);
-            String[] bestStrs = result.split(",");
-            if (bestStrs.length <= 10) {
-                int i = 0;
-                for (String bestStr : bestStrs) {
-                    if (!"".equals(bestStr)) {
-                        String[] s = bestStr.split(":");
-                        String finalString = formattedUserScoreString(s[0], s[1]);
-                        bestScores[i].setText(finalString);
-                        bestScores[i].setVisibility(View.VISIBLE);
-                    }
-                    i++;
-                }
+            int size = playerNames.size() < 10 ? playerNames.size() : 10;
+
+            for (int i = 0; i < size; i++) {
+                String name = playerNames.get(i);
+                String score = Double.toString(scores.get(i));
+                String finalString = formattedUserScoreString(name, score);
+                bestScores[i].setText(finalString);
+                bestScores[i].setVisibility(View.VISIBLE);
             }
         }
     }
