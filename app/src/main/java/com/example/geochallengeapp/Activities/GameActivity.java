@@ -35,9 +35,8 @@ import static com.example.geochallengeapp.Util.Constants.*;
 public class GameActivity extends AppCompatActivity implements IGameManagerStarter,IResponseHandler {
 
 //    private final String SERVER_IP = "10.0.2.2";
-    // TODO - DO NOT PUBLISH
-    private final String LAMBDA_URL = "https://xxxxxxxx.execute-api.eu-central-1.amazonaws.com/dev/gcserver";
-    private final int PORT = 4567;
+    private final String LAMBDA_URL = IP_LAMBDA;
+    private final int PORT = SERVER_PORT;
 
     private static final String TAG = "========== GameActivity";
 
